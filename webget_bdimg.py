@@ -24,6 +24,9 @@ def decode(url):
 
 if __name__ == '__main__':
     word='python'
+    savedir='img'
+    if not os.path.exists(savedir):
+        os.mkdir(savedir)
     url = r"http://image.baidu.com/search/acjson?tn=resultjson_com&ipn=rj&ct=201326592&fp=result&queryWord={word}&cl=2&lm=-1&ie=utf-8&oe=utf-8&st=-1&ic=0&word={word}&face=0&istype=2nc=1&pn={pn}&rn=60"
     for url in (url.format(word=word, pn=x) for x in itertools.count(start=0, step=60)):
         html = requests.get(url, timeout=10).content.decode('utf-8') #返回json格式的字符串
@@ -31,5 +34,3 @@ if __name__ == '__main__':
         for i in trange(len(data)-1):      #进度条
             url=decode(data[i]['objURL'])  #获取图片URL并解码
             urllib.urlretrieve(url,'img/{0}.jpg'.format(hashlib.md5(url).hexdigest())) #下载图片
-
-
